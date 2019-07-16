@@ -26,6 +26,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libpcre3-dev \
     bison \
     byacc \
+    ffmpeg \
     cuda-command-line-tools-9.0 \
     cuda-core-9-0=9.0.176.3-1 \
     cuda-cublas-dev-9-0=9.0.176.4-1 \
@@ -41,6 +42,7 @@ RUN add-apt-repository -y ppa:jonathonf/python-3.6 \
     && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && python get-pip.py \
     && rm get-pip.py \
+    && apt-get autoremove -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
