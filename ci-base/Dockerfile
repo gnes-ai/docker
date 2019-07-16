@@ -8,7 +8,7 @@ RUN cd /; wget -q https://gnes-1252847528.cos.ap-guangzhou.myqcloud.com/openai_g
 
 RUN cd /; wget -q https://gnes-1252847528.cos.ap-guangzhou.myqcloud.com/transformer_xl_wt103.tar.bz2 -qO transformer_xl_wt103.tar.bz2; tar -xvjf transformer_xl_wt103.tar.bz2; rm transformer_xl_wt103.tar.bz2
 
-RUN cd /; wget https://gnes-1252847528.cos.ap-guangzhou.myqcloud.com/sgns.wiki.bigram-char.sample -qO sgns.wiki.bigram-char.sample
+RUN cd /; wget -q https://gnes-1252847528.cos.ap-guangzhou.myqcloud.com/sgns.wiki.bigram-char.sample -qO sgns.wiki.bigram-char.sample
 
 RUN mkdir checkpoints \
     && cd /checkpoints \
