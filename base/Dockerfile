@@ -69,12 +69,11 @@ ENV CUDA_ARCH "-gencode=arch=compute_35,code=compute_35 \
                -gencode=arch=compute_61,code=compute_61 \
                -gencode=arch=compute_70,code=compute_70"
 
-RUN wget -q https://github.com/facebookresearch/faiss/archive/master.zip  -O temp.zip \
-    && unzip temp.zip; rm temp.zip \
-    && cd faiss-master \
+RUN wget -q https://github.com/facebookresearch/faiss/archive/v1.5.3.tar.gz \
+    && tar zxf v1.5.3.tar.gz; rm v1.5.3.tar.gz && cd faiss-1.5.3 \
     && ./configure --with-cuda=/usr/local/cuda-9.0 --with-cuda-arch="$CUDA_ARCH" \
     && make -j 10 \
     && cd python && make \
     && pip --no-cache-dir install . \
-    && cd .. && rm -rf faiss-master \
+    && cd .. && rm -rf faiss-1.5.3 \
     && rm -rf /tmp/*
