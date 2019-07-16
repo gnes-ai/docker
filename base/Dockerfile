@@ -19,6 +19,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     g++ \
     automake \
     software-properties-common \
+    libzmq5 \
     libblas-dev \
     liblapack-dev \
     libpcre3 \
@@ -28,6 +29,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     cuda-command-line-tools-9.0 \
     cuda-core-9-0=9.0.176.3-1 \
     cuda-cublas-dev-9-0=9.0.176.4-1 \
+    libsm6 libxext6 libxrender-dev \
     && apt-get clean
 
 # Install python-3.6
