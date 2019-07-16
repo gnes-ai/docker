@@ -12,7 +12,8 @@ RUN cd /; wget https://gnes-1252847528.cos.ap-guangzhou.myqcloud.com/sgns.wiki.b
 
 RUN mkdir checkpoints \
     && cd /checkpoints \
+    && wget -q https://download.pytorch.org/models/vgg16-397923af.pth \
+    && wget -q https://download.pytorch.org/models/resnet50-19c8e357.pth \
+    && wget -q https://download.pytorch.org/models/inception_v3_google-1a9a5a14.pth \
     && wget -q https://download.pytorch.org/models/fasterrcnn_resnet50_fpn_coco-258fb6c6.pth \
     && wget -q https://download.pytorch.org/models/mobilenet_v2-b0353104.pth
-
-
