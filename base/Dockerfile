@@ -1,0 +1,78 @@
+FROM nvidia/cuda:9.0-base-ubuntu16.04
+
+MAINTAINER team@gnes.ai
+
+ARG TENSORFLOW_VERSION=1.14.0
+ARG TORCH_VERSION=1.1.0
+
+ENV LANG=C.UTF-8
+
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
+    build-essential \
+    vim \
+    git \
+    wget \
+    curl \
+    cmake \
+    unzip \
+    gcc \
+    g++ \
+    automake \
+    software-properties-common \
+    libblas-dev \
+    liblapack-dev \
+    libpcre3 \
+    libpcre3-dev \
+    bison \
+    byacc \
+    cuda-command-line-tools-9.0 \
+    cuda-core-9-0=9.0.176.3-1 \
+    cuda-cublas-dev-9-0=9.0.176.4-1 \
+    && apt-get clean
+
+# Install python-3.6
+RUN add-apt-repository -y ppa:jonathonf/python-3.6 \
+    && apt-get update -y \
+    && apt-get install -y python3.6 python3.6-dev \
+    && ln -sfn /usr/bin/python3.6 /usr/local/bin/python \
+    && ln -sfn /usr/bin/python3.6 /usr/bin/python3 \
+    && curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
+    && python get-pip.py \
+    && rm get-pip.py \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+
+# Install TensorFlow
+RUN pip --no-cache-dir install tensorflow-gpu==${TENSORFLOW_VERSION}
+
+# Install PyTorch
+RUN pip --no-cache-dir install \
+    https://download.pytorch.org/whl/cu90/torch-${TORCH_VERSION}-cp36-cp36m-linux_x86_64.whl
+
+# Install faiss
+# Need SWIG >= 3.0.8
+RUN cd /tmp/ \
+    && wget -q https://github.com/swig/swig/archive/rel-3.0.12.tar.gz \
+    && tar zxf rel-3.0.12.tar.gz; rm rel-3.0.12.tar.gz && cd swig-rel-3.0.12 \
+    && ./autogen.sh; ./configure >/dev/null \
+    && make >/dev/null \
+    && make install >/dev/null \
+    && cd .. && rm -rf swig-rel-3.0.12
+
+ENV CUDA_ARCH "-gencode=arch=compute_35,code=compute_35 \
+               -gencode=arch=compute_52,code=compute_52 \
+               -gencode=arch=compute_60,code=compute_60 \
+               -gencode=arch=compute_61,code=compute_61 \
+               -gencode=arch=compute_70,code=compute_70" \
+
+# install faiss from source
+RUN wget -q https://github.com/facebookresearch/faiss/archive/master.zip  -O temp.zip \
+    && unzip temp.zip; rm temp.zip \
+    && cd faiss-master \
+    && ./configure --with-cuda=/usr/local/cuda-9.0 --with-cuda-arch="$CUDA_ARCH" --with-python=python3 \
+    && make -j 10 \
+    && make install \
+    && make -C python; cd python \
+    && pip --no-cache-dir install . \
+    && cd .. && rm -rf faiss-master
