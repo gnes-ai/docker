@@ -1,4 +1,4 @@
-FROM nvidia/cuda:9.0-base-ubuntu16.04
+FROM nvidia/cuda:10.0-devel-ubuntu16.04
 
 MAINTAINER team@gnes.ai
 
@@ -27,9 +27,6 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     bison \
     byacc \
     ffmpeg \
-    cuda-command-line-tools-9.0 \
-    cuda-core-9-0=9.0.176.3-1 \
-    cuda-cublas-dev-9-0=9.0.176.4-1 \
     libsm6 libxext6 libxrender-dev \
     && apt-get clean
 
@@ -52,7 +49,7 @@ RUN pip --no-cache-dir install tensorflow-gpu==${TENSORFLOW_VERSION}
 
 # Install PyTorch
 RUN pip --no-cache-dir install \
-    https://download.pytorch.org/whl/cu90/torch-${TORCH_VERSION}-cp36-cp36m-linux_x86_64.whl
+    https://download.pytorch.org/whl/cu100/torch-${TORCH_VERSION}-cp36-cp36m-linux_x86_64.whl
 
 # Install faiss
 # Need SWIG >= 3.0.8
