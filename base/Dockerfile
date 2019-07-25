@@ -1,8 +1,8 @@
-FROM nvidia/cuda:10.0-devel-ubuntu16.04
+FROM nvidia/cuda:9.0-devel-ubuntu16.04
 
 MAINTAINER team@gnes.ai
 
-ARG TENSORFLOW_VERSION=1.14.0
+ARG TENSORFLOW_VERSION=1.12.0
 ARG TORCH_VERSION=1.1.0
 
 ENV LANG=C.UTF-8
@@ -49,7 +49,7 @@ RUN pip --no-cache-dir install tensorflow-gpu==${TENSORFLOW_VERSION}
 
 # Install PyTorch
 RUN pip --no-cache-dir install \
-    https://download.pytorch.org/whl/cu100/torch-${TORCH_VERSION}-cp36-cp36m-linux_x86_64.whl
+    https://download.pytorch.org/whl/cu90/torch-${TORCH_VERSION}-cp36-cp36m-linux_x86_64.whl
 
 # Install faiss
 # Need SWIG >= 3.0.8
@@ -62,9 +62,15 @@ RUN cd /tmp/ \
     && cd .. && rm -rf swig-rel-3.0.12
 
 # install faiss from source
+ENV CUDA_ARCH "-gencode=arch=compute_35,code=compute_35 \
+               -gencode=arch=compute_52,code=compute_52 \
+               -gencode=arch=compute_60,code=compute_60 \
+               -gencode=arch=compute_61,code=compute_61 \
+               -gencode=arch=compute_70,code=compute_70"
+
 RUN wget -q https://github.com/facebookresearch/faiss/archive/v1.5.3.tar.gz \
     && tar zxf v1.5.3.tar.gz; rm v1.5.3.tar.gz && cd faiss-1.5.3 \
-    && ./configure --with-cuda=/usr/local/cuda-10.0 \
+    && ./configure --with-cuda=/usr/local/cuda-9.0 --with-cuda-arch="$CUDA_ARCH" \
     && make -j 10 \
     && cd python && make \
     && pip --no-cache-dir install . \
