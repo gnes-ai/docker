@@ -62,15 +62,9 @@ RUN cd /tmp/ \
     && cd .. && rm -rf swig-rel-3.0.12
 
 # install faiss from source
-ENV CUDA_ARCH "-gencode=arch=compute_35,code=compute_35 \
-               -gencode=arch=compute_52,code=compute_52 \
-               -gencode=arch=compute_60,code=compute_60 \
-               -gencode=arch=compute_61,code=compute_61 \
-               -gencode=arch=compute_70,code=compute_70"
-
 RUN wget -q https://github.com/facebookresearch/faiss/archive/v1.5.3.tar.gz \
     && tar zxf v1.5.3.tar.gz; rm v1.5.3.tar.gz && cd faiss-1.5.3 \
-    && ./configure --with-cuda=/usr/local/cuda-9.0 --with-cuda-arch="$CUDA_ARCH" \
+    && ./configure --with-cuda=/usr/local/cuda-10.0 \
     && make -j 10 \
     && cd python && make \
     && pip --no-cache-dir install . \
