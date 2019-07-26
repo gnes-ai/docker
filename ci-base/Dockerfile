@@ -1,5 +1,7 @@
 FROM gnes/build-base:latest
 
+MAINTAINER team@gnes.ai
+
 RUN cd /; wget -q https://gnes-1252847528.cos.ap-guangzhou.myqcloud.com/zhs.model.tar.bz2 -qO zhs.model.tar.bz2; tar -xvjf zhs.model.tar.bz2; rm zhs.model.tar.bz2
 
 RUN cd /; wget -q https://gnes-1252847528.cos.ap-guangzhou.myqcloud.com/openai_gpt.tar.bz2 -qO openai_gpt.tar.bz2; tar -xvjf openai_gpt.tar.bz2; rm openai_gpt.tar.bz2
