@@ -4,6 +4,7 @@ MAINTAINER team@gnes.ai
 
 ARG TENSORFLOW_VERSION=1.14.0
 ARG TORCH_VERSION=1.1.0
+ARG TORCH_VISION_VERSION=0.3.0
 
 ENV LANG=C.UTF-8
 
@@ -47,9 +48,12 @@ RUN add-apt-repository -y ppa:jonathonf/python-3.6 \
 # Install TensorFlow
 RUN pip --no-cache-dir install tensorflow-gpu==${TENSORFLOW_VERSION}
 
-# Install PyTorch
+# Install pytorch and torchvision
 RUN pip --no-cache-dir install \
     https://download.pytorch.org/whl/cu100/torch-${TORCH_VERSION}-cp36-cp36m-linux_x86_64.whl
+RUN pip --no-cache-dir install \
+    https://download.pytorch.org/whl/cu100/torchvision-${TORCH_VISION_VERSION}-cp36-cp36m-linux_x86_64.whl
+
 
 # Install faiss
 # Need SWIG >= 3.0.8
