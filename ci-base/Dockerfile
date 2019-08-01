@@ -19,3 +19,13 @@ RUN mkdir checkpoints \
     && wget -q https://download.pytorch.org/models/inception_v3_google-1a9a5a14.pth \
     && wget -q https://download.pytorch.org/models/fasterrcnn_resnet50_fpn_coco-258fb6c6.pth \
     && wget -q https://download.pytorch.org/models/mobilenet_v2-b0353104.pth
+
+RUN cd / \
+    && wget -q https://s3.amazonaws.com/onnx-model-zoo/resnet/resnet50v2/resnet50v2.onnx -qO resnet50.onnx \
+    && wget -q https://s3.amazonaws.com/onnx-model-zoo/vgg/vgg16/vgg16.onnx -qO vgg16.onnx \
+	&& wget -q https://s3.amazonaws.com/onnx-model-zoo/mobilenet/mobilenetv2-1.0/mobilenetv2-1.0.onnx -qO mobilenetv2.onnx \
+	&& wget -q https://s3.amazonaws.com/download.onnx/models/opset_9/inception_v2.tar.gz -qO inception_v2.tar.gz \
+	&& tar -zxvf inception_v2.tar.gz \
+	&& cp inception_v2/model.onnx inception_v2.onnx \
+	&& rm inception_v2.tar.gz \
+	&& rm inception_v2 -rf
