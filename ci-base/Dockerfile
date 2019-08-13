@@ -29,3 +29,9 @@ RUN cd / \
 	&& cp inception_v2/model.onnx inception_v2.onnx \
 	&& rm inception_v2.tar.gz \
 	&& rm inception_v2 -rf
+
+RUN mkdir torch_transformer \
+    && cd torch_transformer \
+    && wget -q https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-pytorch_model.bin -qO pytorch_model.bin \
+    && wget -q https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-config.json -qO config.json \
+    && wget -q https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-vocab.txt -qO vocab.txt
